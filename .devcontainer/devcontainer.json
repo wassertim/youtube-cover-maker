@@ -1,0 +1,29 @@
+{
+    "name": "Python 3",
+    "context": "..",
+    "dockerFile": "Dockerfile",    
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-toolsai.jupyter",
+                "esbenp.prettier-vscode",
+                "canadaduane.notes"
+            ],
+            "settings": {                
+                "terminal.integrated.shellIntegration.enabled": true,
+                "terminal.integrated.shellIntegration.suggestEnabled": true,
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    "postCreateCommand": "pip install -r requirements.txt",
+    "remoteUser": "vscode",
+    "forwardPorts": [],
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/workspace",
+    "remoteEnv": {
+        "HISTFILE": "/workspace/.bash_history"
+    }
+}
