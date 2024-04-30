@@ -62,18 +62,22 @@ def add_image_overlay(image, overlay_image_path, scale_factor):
     # Load the overlay image
     overlay_image = Image.open(overlay_image_path)
 
-    # Calculate the new size as 10% of the original image size
-    new_width = int(image.width * scale_factor)
+    # Determine the scale to apply based on the main image dimensions while maintaining aspect ratio
+    original_width, original_height = overlay_image.size
+    aspect_ratio = original_width / original_height
+
+    # Calculate new dimensions based on aspect ratio
     new_height = int(image.height * scale_factor)
-    
-    # Resize the overlay image using LANCZOS resampling
+    new_width = int(new_height * aspect_ratio)
+
+    # Resize the overlay image using LANCZOS resampling, maintaining aspect ratio
     overlay_image = overlay_image.resize((new_width, new_height), Image.LANCZOS)
 
-    # Position the overlay in the top left corner
-    position = (40, 40)  # Top left corner of the main image
+    # Position the overlay in the top left corner (adjust as necessary)
+    position = (40, 40)  # Adjust this if needed
 
-    # Paste the overlay image onto the main image at the specified position
-    image.paste(overlay_image, position, overlay_image)
+    # Paste the overlay image onto the main image at the specified position, ensuring alpha is used if present
+    image.paste(overlay_image, position, overlay_image if overlay_image.mode == 'RGBA' else None)
     
 def create_cover_image(
     file_path='./original.jpeg', 
