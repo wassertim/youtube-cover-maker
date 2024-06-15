@@ -4,7 +4,7 @@ import lib.constants as constants
 from lib.fonts import download_font
 from lib.fonts import get_font
 
-def create_title_overlay(image, title, subtitle, font_name="Inter", title_font_size=110, subtitle_font_size=65):
+def create_title_overlay(image, title, subtitle, font_name="Inter", title_font_size=120, subtitle_font_size=75, transparency_factor=0.75):
     download_font(font_name)
     font_path = os.path.join(constants.FONTS_PATH, f"{font_name}.ttf")
     # Calculate the position and size based on the image dimensions
@@ -15,7 +15,7 @@ def create_title_overlay(image, title, subtitle, font_name="Inter", title_font_s
 
     # Define the position and size of the black box with transparency
     black_box_position = (x, y, x + width, y + height)
-    transparency = int(255 * 0.75)
+    transparency = int(255 * transparency_factor)
     fill_color = (0, 0, 0, transparency)
     fill_color_red = (90, 0, 0, transparency)
     fill_color = fill_color_red
@@ -74,16 +74,19 @@ def add_image_overlay(image, overlay_image_path, scale_factor):
     overlay_image = overlay_image.resize((new_width, new_height), Image.LANCZOS)
 
     # Position the overlay in the top left corner (adjust as necessary)
-    position = (40, 40)  # Adjust this if needed
+    position = (50, 50)  # Adjust this if needed
 
     # Paste the overlay image onto the main image at the specified position, ensuring alpha is used if present
     image.paste(overlay_image, position, overlay_image if overlay_image.mode == 'RGBA' else None)
     
 def create_cover_image(
-    file_path='./original.jpeg', 
+    file_path='./original.png', 
     output_path='./out/output.jpg',
-    title='Example Title',
-    subtitle='Example Subtitle',
+    title='Untitled',
+    subtitle='untitled',
+    transparency=0.75,
+    title_font_size=120,
+    subtitle_font_size=75
 ):
     main_image = Image.open(file_path).convert('RGBA')  # Ensure it's in RGBA mode
 
@@ -91,7 +94,10 @@ def create_cover_image(
         main_image, 
         title=title,
         subtitle=subtitle,
-        font_name='Inter'
+        font_name='Inter',
+        transparency_factor=transparency,
+        title_font_size=title_font_size,
+        subtitle_font_size=subtitle_font_size
     )
 
     # Apply image overlay, scaled to 10%
